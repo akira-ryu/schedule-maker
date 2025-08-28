@@ -1,0 +1,2 @@
+add a button that takes a new peron object and saves as a json
+and the object for UI should read from the json
