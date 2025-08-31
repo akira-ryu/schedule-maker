@@ -48,6 +48,12 @@ namespace subcinctus_factorem
                     {
                         new schedule { Date = "Sep 4", Position = "Tech", start = "9.00", end = "11.00" }
                     }
+                },
+                new Person { Title = "Person 3", Description = "Description 3",
+                    shifts = new ObservableCollection<schedule>
+                    {
+                        new schedule { Date = "Sep 8", Position = "Tech y", start = "9.00", end = "11.00" }
+                    }
                 }
             };
 

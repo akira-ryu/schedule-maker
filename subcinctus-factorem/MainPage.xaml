@@ -26,42 +26,48 @@
 
         <!-- Schedule grid for the selected person -->
         <Border Grid.Row="1"
-                Stroke="LightGray"
-                StrokeShape="RoundRectangle 15"
-                StrokeThickness="1"
-                
-                Margin="10"
-                Padding="15"
-                VerticalOptions="Fill"
-                HorizontalOptions="Fill">
+        Stroke="LightGray"
+        StrokeShape="RoundRectangle 15"
+        StrokeThickness="1"
+        Margin="10"
+        Padding="20"
+        VerticalOptions="Fill"
+        HorizontalOptions="Fill">
 
-            <Grid RowDefinitions="Auto,*"
-                  ColumnDefinitions="*,*,*,*">
+            <VerticalStackLayout Spacing="10">
 
                 <!-- Headers -->
-                <Label Grid.Row="0" Grid.Column="0" Text="Date" FontAttributes="Bold" HorizontalOptions="Center"/>
-                <Label Grid.Row="0" Grid.Column="1" Text="Position" FontAttributes="Bold" HorizontalOptions="Center"/>
-                <Label Grid.Row="0" Grid.Column="2" Text="Start" FontAttributes="Bold" HorizontalOptions="Center"/>
-                <Label Grid.Row="0" Grid.Column="3" Text="End" FontAttributes="Bold" HorizontalOptions="Center"/>
+                <FlexLayout Direction="Row"
+                    JustifyContent="SpaceAround"
+                    AlignItems="Start"
+                    Wrap="NoWrap"
+                    >
+                    <Label Text="DATE" FontSize="30" FontAttributes="Bold"/>
+                    <Label Text="POSITION" FontSize="30" FontAttributes="Bold"/>
+                    <Label Text="START" FontSize="30" FontAttributes="Bold"/>
+                    <Label Text="END" FontSize="30" FontAttributes="Bold"/>
+                </FlexLayout>
 
                 <!-- Rows of schedule -->
-                <CollectionView Grid.Row="1"
-                                Grid.ColumnSpan="4"
-                                ItemsSource="{Binding SelectedPerson.shifts}">
-                    <CollectionView.ItemTemplate>
+                <StackLayout BindableLayout.ItemsSource="{Binding SelectedPerson.shifts}"
+                     Spacing="5">
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="*,*,*,*"
-                                Padding="5">
-                                <Label Grid.Column="0" Text="{Binding Date}" HorizontalOptions="Center"/>
-                                <Label Grid.Column="1" Text="{Binding Position}" HorizontalOptions="Center"/>
-                                <Label Grid.Column="2" Text="{Binding start}" HorizontalOptions="Center"/>
-                                <Label Grid.Column="3" Text="{Binding end}" HorizontalOptions="Center"/>
-                            </Grid>
+                            <FlexLayout Direction="Row"
+                                JustifyContent="SpaceAround"
+                                AlignItems="Start"
+                                Wrap="NoWrap"
+                                >
+                                <Label Text="{Binding Date}" FontSize="20" WidthRequest="90" HorizontalTextAlignment="Center"/>
+                                <Label Text="{Binding Position}" FontSize="20" WidthRequest="100" HorizontalTextAlignment="Center"/>
+                                <Label Text="{Binding start}" FontSize="20"  HorizontalTextAlignment="End" WidthRequest="90"/>
+                                <Label Text="{Binding end}" FontSize="20"  HorizontalTextAlignment="End" WidthRequest="90"/>
+                            </FlexLayout>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
 
-            </Grid>
+            </VerticalStackLayout>
         </Border>
     </Grid>
 </ContentPage>
