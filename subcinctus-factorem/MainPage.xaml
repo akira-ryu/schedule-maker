@@ -41,27 +41,33 @@
                     JustifyContent="SpaceAround"
                     AlignItems="Start"
                     Wrap="NoWrap"
+                    Margin="0,0,0,10"
                     >
-                    <Label Text="DATE" FontSize="30" FontAttributes="Bold"/>
-                    <Label Text="POSITION" FontSize="30" FontAttributes="Bold"/>
-                    <Label Text="START" FontSize="30" FontAttributes="Bold"/>
-                    <Label Text="END" FontSize="30" FontAttributes="Bold"/>
+                    <Label Text="Date" FontSize="30" FontAttributes="Bold"/>
+                    <Label Text="Position" FontSize="30" FontAttributes="Bold"/>
+                    <Label Text="Start" FontSize="30" FontAttributes="Bold"/>
+                    <Label Text="End" FontSize="30" FontAttributes="Bold"/>
                 </FlexLayout>
 
                 <!-- Rows of schedule -->
-                <StackLayout BindableLayout.ItemsSource="{Binding SelectedPerson.shifts}"
+                <StackLayout BindableLayout.ItemsSource="{Binding CurrentWeek}"
                      Spacing="5">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <FlexLayout Direction="Row"
                                 JustifyContent="SpaceAround"
                                 AlignItems="Start"
-                                Wrap="NoWrap"
-                                >
-                                <Label Text="{Binding Date}" FontSize="20" WidthRequest="90" HorizontalTextAlignment="Center"/>
-                                <Label Text="{Binding Position}" FontSize="20" WidthRequest="100" HorizontalTextAlignment="Center"/>
-                                <Label Text="{Binding start}" FontSize="20"  HorizontalTextAlignment="End" WidthRequest="90"/>
-                                <Label Text="{Binding end}" FontSize="20"  HorizontalTextAlignment="End" WidthRequest="90"/>
+                                Wrap="NoWrap">
+                                <Label Text="{Binding ., StringFormat='{0:MMM dd}'}" FontSize="20" WidthRequest="120" HorizontalTextAlignment="Center"/>
+                                <Picker FontSize="14"  WidthRequest="190" HorizontalTextAlignment="Center"
+                                  ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=MyOptions}"
+                                  SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=SelectedOption}" />
+                                <Picker FontSize="14"  WidthRequest="120" HorizontalTextAlignment="Center"
+                                  ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=MyOptions}"
+                                  SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=SelectedOption}" />
+                                <Picker FontSize="14"  WidthRequest="120" HorizontalTextAlignment="Center"
+                                  ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=MyOptions}"
+                                  SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=SelectedOption}" />
                             </FlexLayout>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>

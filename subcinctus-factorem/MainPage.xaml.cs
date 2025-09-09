@@ -2,15 +2,22 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-
+using subcinctus_factorem.utils;
 namespace subcinctus_factorem
 {
     public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         public ObservableCollection<Person> employees { get; set; }
-
+        public ObservableCollection<DateTime> CurrentWeek { get; set; }
         private Person _selectedPerson;
+        public List<string> MyOptions { get; set; } = new List<string>
+    {
+        "Option 1",
+        "Option 2",
+        "Option 3"
+    };
 
+        public string SelectedOption { get; set; }
         public ICommand SelectPersonCommand => new Command<Person>(person =>
         {
             SelectedPerson = person;
@@ -27,9 +34,16 @@ namespace subcinctus_factorem
 
         public MainPage()
         {
+            Utils u = new Utils();
+            CurrentWeek = new ObservableCollection<DateTime>(u.GetCurrentWeekDates());
             InitializeComponent();
             LoadItems();
             BindingContext = this;
+
+            //foreach (var item in currentWeek)
+            //{
+            //    Console.WriteLine(item.Date);
+            //}
         }
 
         private void LoadItems()
