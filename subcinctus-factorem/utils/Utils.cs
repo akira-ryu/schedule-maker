@@ -25,5 +25,20 @@ namespace subcinctus_factorem.utils
 
             return weekDates;
         }
+        public List<string> GetTimmings() {
+            var timmings = new List<string>();
+
+            for (int hour = 0; hour < 24; hour++)
+            {
+                // Use DateTime to format into 12-hour clock with AM/PM
+                string time = DateTime.Today.AddHours(hour).ToString("hh tt");
+                timmings.Add(time);
+            }
+
+            // Add 12 AM again to close the loop (end of day)
+            timmings.Add("12 AM");
+
+            return timmings;
+        }
     }
 }

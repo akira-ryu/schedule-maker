@@ -4,76 +4,367 @@
              xmlns:local="clr-namespace:subcinctus_factorem"
              x:Class="subcinctus_factorem.MainPage">
 
-    <Grid RowDefinitions="Auto,*">
+    <!-- Ultra-clean Background -->
+    <ContentPage.Background>
+        <SolidColorBrush Color="#F8F3CE" />
+    </ContentPage.Background>
 
-        <!-- Horizontal list of person buttons -->
-        <CollectionView Grid.Row="0"
-                ItemsSource="{Binding employees}"
-                SelectionMode="Single"
-                SelectedItem="{Binding SelectedPerson}">
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Horizontal"/>
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Button Text="{Binding Title}" 
-            Margin="10"
-            Command="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=SelectPersonCommand}"
-            CommandParameter="{Binding}"/>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+    <Grid RowDefinitions="Auto,Auto,*" Margin="32,24,32,32">
 
-        <!-- Schedule grid for the selected person -->
-        <Border Grid.Row="1"
-        Stroke="LightGray"
-        StrokeShape="RoundRectangle 15"
-        StrokeThickness="1"
-        Margin="10"
-        Padding="20"
-        VerticalOptions="Fill"
-        HorizontalOptions="Fill">
+        <!-- Elegant Header -->
+        <Border Grid.Row="0" 
+                BackgroundColor="#57564F"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                Margin="0,0,0,24"
+                Padding="32,20">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12"/>
+            </Border.StrokeShape>
 
-            <VerticalStackLayout Spacing="10">
+            <StackLayout HorizontalOptions="Center">
+                <Label Text="SCHEDULE" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       TextColor="#F8F3CE"
+                       HorizontalOptions="Center"/>
+            </StackLayout>
+        </Border>
 
-                <!-- Headers -->
-                <FlexLayout Direction="Row"
-                    JustifyContent="SpaceAround"
-                    AlignItems="Start"
-                    Wrap="NoWrap"
-                    Margin="0,0,0,10"
-                    >
-                    <Label Text="Date" FontSize="30" FontAttributes="Bold"/>
-                    <Label Text="Position" FontSize="30" FontAttributes="Bold"/>
-                    <Label Text="Start" FontSize="30" FontAttributes="Bold"/>
-                    <Label Text="End" FontSize="30" FontAttributes="Bold"/>
-                </FlexLayout>
+        <!-- Refined Employee Selection -->
+        <Border Grid.Row="1" 
+                BackgroundColor="#DDDAD0"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                Margin="0,0,0,24"
+                Padding="28,20">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
 
-                <!-- Rows of schedule -->
-                <StackLayout BindableLayout.ItemsSource="{Binding CurrentWeek}"
-                     Spacing="5">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <FlexLayout Direction="Row"
-                                JustifyContent="SpaceAround"
-                                AlignItems="Start"
-                                Wrap="NoWrap">
-                                <Label Text="{Binding ., StringFormat='{0:MMM dd}'}" FontSize="20" WidthRequest="120" HorizontalTextAlignment="Center"/>
-                                <Picker FontSize="14"  WidthRequest="190" HorizontalTextAlignment="Center"
-                                  ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=MyOptions}"
-                                  SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=SelectedOption}" />
-                                <Picker FontSize="14"  WidthRequest="120" HorizontalTextAlignment="Center"
-                                  ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=MyOptions}"
-                                  SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=SelectedOption}" />
-                                <Picker FontSize="14"  WidthRequest="120" HorizontalTextAlignment="Center"
-                                  ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=MyOptions}"
-                                  SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=SelectedOption}" />
-                            </FlexLayout>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
+            <StackLayout Spacing="16">
+                <Label Text="Select Employee" 
+                       FontSize="14" 
+                       FontAttributes="Bold"
+                       TextColor="#7A7A73"
+                       Margin="0,0,0,8"/>
+
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                    <!-- Employee List -->
+                    <CollectionView Grid.Column="0"
+                                   ItemsSource="{Binding employees}"
+                                   SelectionMode="Single"
+                                   SelectedItem="{Binding SelectedPerson}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="16"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#F8F3CE"
+                                       Stroke="Transparent"
+                                       StrokeThickness="0"
+                                       Padding="24,16"
+                                       MinimumWidthRequest="100">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="24"/>
+                                    </Border.StrokeShape>
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border"
+                                                   Binding="{Binding IsSelected}"
+                                                   Value="True">
+                                            <Setter Property="BackgroundColor" Value="#57564F"/>
+                                        </DataTrigger>
+                                    </Border.Triggers>
+
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=SelectPersonCommand}"
+                                                             CommandParameter="{Binding}"/>
+                                    </Border.GestureRecognizers>
+
+                                    <Label Text="{Binding Name}" 
+                                          FontSize="15"
+                                          TextColor="#57564F"
+                                          HorizontalOptions="Center"
+                                          VerticalOptions="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                                       Binding="{Binding IsSelected}"
+                                                       Value="True">
+                                                <Setter Property="TextColor" Value="#F8F3CE"/>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Add Employee Button -->
+                    <Border Grid.Column="1"
+                           BackgroundColor="#57564F"
+                           Stroke="Transparent"
+                           StrokeThickness="0"
+                           WidthRequest="56"
+                           HeightRequest="56"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <Ellipse/>
+                        </Border.StrokeShape>
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AddEmployeeCommand}"/>
+                        </Border.GestureRecognizers>
+
+                        <Label Text="+"
+                               FontSize="28"
+                               FontAttributes="Bold"
+                               TextColor="#F8F3CE"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Border>
+                </Grid>
+            </StackLayout>
+        </Border>
+
+        <!-- Premium Schedule Card -->
+        <Border Grid.Row="2"
+                BackgroundColor="#DDDAD0"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                VerticalOptions="Fill">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="20"/>
+            </Border.StrokeShape>
+
+            <ScrollView Padding="32,28">
+                <StackLayout Spacing="28">
+
+                    <!-- Sophisticated Header with Delete Button -->
+                    <Grid ColumnDefinitions="*,Auto" RowSpacing="12">
+                        <StackLayout Grid.Column="0" Spacing="6">
+                            <Label Text="{Binding SelectedPerson.Name, StringFormat='{0}'}" 
+                                   FontSize="32" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#57564F"/>
+                            <Label Text="Schedule Management"
+                                   FontSize="16"
+                                   TextColor="#7A7A73"/>
+                        </StackLayout>
+
+                        <!-- Delete Button -->
+                        <Border Grid.Column="1"
+                               BackgroundColor="#D9534F"
+                               Stroke="Transparent"
+                               StrokeThickness="0"
+                               WidthRequest="48"
+                               HeightRequest="48"
+                               HorizontalOptions="End"
+                               VerticalOptions="Start">
+                            <Border.StrokeShape>
+                                <Ellipse/>
+                            </Border.StrokeShape>
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DeleteEmployeeCommand}"/>
+                            </Border.GestureRecognizers>
+
+                            <Label Text="X"
+                                   FontSize="20"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Clean Table Headers -->
+                    <Border BackgroundColor="#7A7A73" 
+                           Stroke="Transparent"
+                           StrokeThickness="0"
+                           Padding="28,20">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
+                            <Label Grid.Column="0" 
+                                   Text="DATE" 
+                                   FontSize="13" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#F8F3CE"
+                                   HorizontalOptions="Center"/>
+                            <Label Grid.Column="1" 
+                                   Text="POSITION" 
+                                   FontSize="13" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#F8F3CE"
+                                   HorizontalOptions="Center"/>
+                            <Label Grid.Column="2" 
+                                   Text="START" 
+                                   FontSize="13" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#F8F3CE"
+                                   HorizontalOptions="Center"/>
+                            <Label Grid.Column="3" 
+                                   Text="END" 
+                                   FontSize="13" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#F8F3CE"
+                                   HorizontalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Refined Schedule Rows -->
+                    <StackLayout BindableLayout.ItemsSource="{Binding SelectedPerson.Schedule}"
+                                Spacing="16">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#F8F3CE"
+                                       Stroke="Transparent"
+                                       StrokeThickness="0"
+                                       Padding="28,24">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="16"/>
+                                    </Border.StrokeShape>
+
+                                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="20">
+
+                                        <!-- Elegant Date Display -->
+                                        <Border Grid.Column="0" 
+                                               BackgroundColor="#DDDAD0"
+                                               Padding="16,12"
+                                               HorizontalOptions="Fill">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12"/>
+                                            </Border.StrokeShape>
+                                            <StackLayout HorizontalOptions="Center" Spacing="2">
+                                                <Label Text="{Binding Date, StringFormat='{0:MMM}'}"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#7A7A73"
+                                                       HorizontalOptions="Center"/>
+                                                <Label Text="{Binding Date, StringFormat='{0:dd}'}"
+                                                       FontSize="18"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#57564F"
+                                                       HorizontalOptions="Center"/>
+                                            </StackLayout>
+                                        </Border>
+
+                                        <!-- Premium Pickers -->
+                                        <Border Grid.Column="1" 
+                                               BackgroundColor="#DDDAD0"
+                                               Stroke="Transparent"
+                                               StrokeThickness="0"
+                                               HorizontalOptions="Fill">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12"/>
+                                            </Border.StrokeShape>
+                                            <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=Positions}"
+                                                   SelectedItem="{Binding Position}"
+                                                   FontSize="15"
+                                                   TextColor="#57564F"
+                                                   BackgroundColor="Transparent"/>
+                                        </Border>
+
+                                        <Border Grid.Column="2" 
+                                               BackgroundColor="#DDDAD0"
+                                               Stroke="Transparent"
+                                               StrokeThickness="0"
+                                               HorizontalOptions="Fill">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12"/>
+                                            </Border.StrokeShape>
+                                            <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=Timmings}"
+                                                   SelectedItem="{Binding Start}"
+                                                   FontSize="15"
+                                                   TextColor="#57564F"
+                                                   BackgroundColor="Transparent"/>
+                                        </Border>
+
+                                        <Border Grid.Column="3" 
+                                               BackgroundColor="#DDDAD0"
+                                               Stroke="Transparent"
+                                               StrokeThickness="0"
+                                               HorizontalOptions="Fill">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12"/>
+                                            </Border.StrokeShape>
+                                            <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=Timmings}"
+                                                   SelectedItem="{Binding End}"
+                                                   FontSize="15"
+                                                   TextColor="#57564F"
+                                                   BackgroundColor="Transparent"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+
+                    <!-- Export Buttons -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20" Margin="0,16,0,0">
+
+                        <!-- Export as PDF Button -->
+                        <Border Grid.Column="0"
+                               BackgroundColor="#57564F"
+                               Stroke="Transparent"
+                               StrokeThickness="0"
+                               Padding="24,16"
+                               HorizontalOptions="Fill">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16"/>
+                            </Border.StrokeShape>
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ExportAsPdfCommand}"/>
+                            </Border.GestureRecognizers>
+
+                            <StackLayout Orientation="Horizontal" 
+                                        HorizontalOptions="Center" 
+                                        Spacing="12">
+                                <Label Text="📄"
+                                       FontSize="18"
+                                       VerticalOptions="Center"/>
+                                <Label Text="EXPORT PDF"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8F3CE"
+                                       VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Border>
+
+                        <!-- Send Email Button -->
+                        <Border Grid.Column="1"
+                               BackgroundColor="#7A7A73"
+                               Stroke="Transparent"
+                               StrokeThickness="0"
+                               Padding="24,16"
+                               HorizontalOptions="Fill">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16"/>
+                            </Border.StrokeShape>
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SendEmailCommand}"/>
+                            </Border.GestureRecognizers>
+
+                            <StackLayout Orientation="Horizontal" 
+                                        HorizontalOptions="Center" 
+                                        Spacing="12">
+                                <Label Text="✉️"
+                                       FontSize="18"
+                                       VerticalOptions="Center"/>
+                                <Label Text="SEND EMAIL"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8F3CE"
+                                       VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Border>
+                    </Grid>
+
                 </StackLayout>
-
-            </VerticalStackLayout>
+            </ScrollView>
         </Border>
     </Grid>
 </ContentPage>

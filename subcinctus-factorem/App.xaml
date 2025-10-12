@@ -5,6 +5,27 @@
              x:Class="subcinctus_factorem.App">
     <Application.Resources>
         <ResourceDictionary>
+            <Style TargetType="Button">
+                
+                <Setter Property="FontFamily" Value="monospace"/>
+            </Style>
+            
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="monospace"/>
+            </Style>
+
+            <!-- Default font for all Buttons -->
+        
+
+            <!-- Default font for all Pickers -->
+            <Style TargetType="Picker">
+                <Setter Property="FontFamily" Value="monospace"/>
+            </Style>
+
+            <!-- Default font for all Entries -->
+            <Style TargetType="Entry">
+                <Setter Property="FontFamily" Value="monospace"/>
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
