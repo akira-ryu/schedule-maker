@@ -3,6 +3,10 @@
     "Windows Machine": {
       "commandName": "Project",
       "nativeDebugging": false
+    },
+    "subcinctus-factorem (Package)": {
+      "commandName": "MsixPackage",
+      "nativeDebugging": false
     }
   }
 }

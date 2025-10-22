@@ -1,4 +1,5 @@
 ﻿using subcinctus_factorem.Employees;
+using System.Diagnostics;
 
 namespace subcinctus_factorem.Services
 {
@@ -13,23 +14,34 @@ namespace subcinctus_factorem.Services
 
         public async Task<bool> SendScheduleEmail(Employee employee, string pdfFilePath = null)
         {
+            if (string.IsNullOrWhiteSpace(employee.Email))
+            {
+                throw new Exception("Employee email is empty");
+            }
+
+            // Generate PDF if it doesn't exist or wasn't provided
+            if (string.IsNullOrWhiteSpace(pdfFilePath) || !File.Exists(pdfFilePath))
+            {
+                pdfFilePath = _pdfService.GenerateSchedulePdf(employee);
+            }
+
+            if (!File.Exists(pdfFilePath))
+            {
+                throw new Exception($"PDF file not found at: {pdfFilePath}");
+            }
+
+            // Open email client with mailto and show PDF location
+            await Task.Run(() => OpenEmailWithPdf(employee, pdfFilePath));
+            return true;
+        }
+
+        private void OpenEmailWithPdf(Employee employee, string pdfFilePath)
+        {
             try
             {
-                if (string.IsNullOrWhiteSpace(employee.Email))
-                {
-                    return false;
-                }
-
-                // Generate PDF if it doesn't exist or wasn't provided
-                if (string.IsNullOrWhiteSpace(pdfFilePath) || !File.Exists(pdfFilePath))
-                {
-                    pdfFilePath = _pdfService.GenerateSchedulePdf(employee);
-                }
-
-                var message = new EmailMessage
-                {
-                    Subject = $"Your Schedule - Week of {DateTime.Now:MMM dd, yyyy}",
-                    Body = $@"Hi {employee.Name},
+                // Create email body with instructions
+                string subject = $"Your Schedule - Week of {DateTime.Now:MMM dd, yyyy}";
+                string body = $@"Hi {employee.Name},
 
 Please find attached your schedule for the current week.
 
@@ -39,22 +51,37 @@ Schedule Details:
 If you have any questions or concerns about your schedule, please contact your manager.
 
 Best regards,
-Management Team",
-                    To = new List<string> { employee.Email }
-                };
+Management Team";
 
-                // Attach PDF
-                if (File.Exists(pdfFilePath))
+                // Escape for mailto URL
+                string mailtoSubject = Uri.EscapeDataString(subject);
+                string mailtoBody = Uri.EscapeDataString(body);
+
+                // Build mailto URL
+                string mailtoUrl = $"mailto:{employee.Email}?subject={mailtoSubject}&body={mailtoBody}";
+                // Open File Explorer with the PDF selected so user can drag-drop it
+                Process.Start(new ProcessStartInfo
                 {
-                    message.Attachments.Add(new EmailAttachment(pdfFilePath));
-                }
+                    FileName = "explorer.exe",
+                    Arguments = $"/select,\"{Path.GetFullPath(pdfFilePath)}\"",
+                    UseShellExecute = true
+                });
+                System.Threading.Thread.Sleep(1000);
+                // Open default email client with the mailto URL
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = mailtoUrl,
+                    UseShellExecute = true
+                });
 
-                await Email.Default.ComposeAsync(message);
-                return true;
+                // Wait a moment for email client to open
+                
+
+                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception($"Failed to open email client: {ex.Message}");
             }
         }
 

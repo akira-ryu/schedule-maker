@@ -1,2 +1,3 @@
-add a button that takes a new peron object and saves as a json
-and the object for UI should read from the json
+file name date should be changed to have space between dates
+ask dVa for email headings and also for automated messages through email
+after that publish and send the setup

@@ -13,10 +13,16 @@ namespace subcinctus_factorem.Services
             // Set QuestPDF license (Community license is free for open source)
             QuestPDF.Settings.License = LicenseType.Community;
 
-            // Create file path in app's document directory
+            // Save to Documents folder instead of AppDataDirectory
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string schedulesFolder = Path.Combine(documentsPath, "EmployeeSchedules");
+
+            // Create directory if it doesn't exist
+            Directory.CreateDirectory(schedulesFolder);
+
+            // Create file path
             string fileName = $"{employee.Name.Replace(" ", "_")}_Schedule_{DateTime.Now:yyyyMMdd}.pdf";
-            string documentsPath = FileSystem.AppDataDirectory;
-            string filePath = Path.Combine(documentsPath, fileName);
+            string filePath = Path.Combine(schedulesFolder, fileName);
 
             // Generate PDF
             Document.Create(container =>
